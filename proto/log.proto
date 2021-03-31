@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "github.com/autokz/go-logger/proto";
+
+import "google/protobuf/empty.proto";
+package proto;
+
+service SendLogs {
+  rpc Send(Logs) returns (google.protobuf.Empty) {}
+}
+
+message Logs {
+  string name = 1;
+  string uuid = 2;
+  string time = 3;
+  string type = 4;
+  string text = 5;
+}
