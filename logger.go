@@ -67,5 +67,5 @@ func Init(name, uuid, addr, port string) {
 }
 
 func SendLog(msgType, text string) {
-	privateServiceLogger.Send(msgType, text)
+	go privateServiceLogger.Send(msgType, text)
 }
