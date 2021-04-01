@@ -73,7 +73,7 @@ func SendLog(msgType, text string) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	go func(ctx context.Context, cancel context.CancelFunc) {
 		defer cancel()
-		privateServiceLogger.Send(msgType, text)
+		// privateServiceLogger.Send(msgType, text)
 		return
 	}(ctx, cancel)
 }
