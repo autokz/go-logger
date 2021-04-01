@@ -18,10 +18,10 @@ type serviceLogger struct {
 	connectionTimeout int
 }
 
-func (sLog *serviceLogger) Send(msgType, text string) {
+func (sLog *serviceLogger) Send(msgType, text string, ctx context.Context) {
 	conn := createGrpcConnect(sLog.serverAddress, sLog.serverPort)
 	client := pb.NewSendLogsClient(conn)
-	ctx := context.Background()
+	// ctx := context.Background()
 	currentTime := time.Now().Local().String()
 
 	_, err := client.Send(ctx, &pb.Logs{
@@ -73,7 +73,7 @@ func SendLog(msgType, text string) {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	go func(ctx context.Context, cancel context.CancelFunc) {
 		defer cancel()
-		// privateServiceLogger.Send(msgType, text)
+		privateServiceLogger.Send(msgType, text, ctx)
 		return
 	}(ctx, cancel)
 }
