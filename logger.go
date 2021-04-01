@@ -69,7 +69,7 @@ func Init(name, uuid, addr, port string, t int) {
 }
 
 func SendLog(msgType, text string) {
-	timeout := time.Duration(privateServiceLogger.connectionTimeout) * time.Second
+	timeout := time.Duration(privateServiceLogger.connectionTimeout) * time.Millisecond
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	go func(ctx context.Context, cancel context.CancelFunc) {
 		defer cancel()
