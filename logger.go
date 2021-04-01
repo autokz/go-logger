@@ -11,10 +11,11 @@ import (
 )
 
 type serviceLogger struct {
-	name          string
-	uuid          string
-	serverAddress string
-	serverPort    string
+	name              string
+	uuid              string
+	serverAddress     string
+	serverPort        string
+	connectionTimeout int
 }
 
 func (sLog *serviceLogger) Send(msgType, text string) {
@@ -57,15 +58,21 @@ func createGrpcConnect(address, port string) *grpc.ClientConn {
 
 var privateServiceLogger *serviceLogger
 
-func Init(name, uuid, addr, port string) {
+func Init(name, uuid, addr, port string, t int) {
 	privateServiceLogger = &serviceLogger{
-		name:          name,
-		uuid:          uuid,
-		serverAddress: addr,
-		serverPort:    port,
+		name:              name,
+		uuid:              uuid,
+		serverAddress:     addr,
+		serverPort:        port,
+		connectionTimeout: t,
 	}
 }
 
 func SendLog(msgType, text string) {
-	go privateServiceLogger.Send(msgType, text)
+	timeout := time.Duration(privateServiceLogger.connectionTimeout) * time.Second
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	go func(ctx context.Context, cancel context.CancelFunc) {
+		defer cancel()
+		privateServiceLogger.Send(msgType, text)
+	}(ctx, cancel)
 }
