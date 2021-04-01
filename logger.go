@@ -74,5 +74,6 @@ func SendLog(msgType, text string) {
 	go func(ctx context.Context, cancel context.CancelFunc) {
 		defer cancel()
 		privateServiceLogger.Send(msgType, text)
+		return
 	}(ctx, cancel)
 }
