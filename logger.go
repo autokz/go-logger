@@ -20,6 +20,7 @@ type serviceLogger struct {
 
 func (sLog *serviceLogger) Send(msgType, text string, ctx context.Context) {
 	conn := createGrpcConnect(sLog.serverAddress, sLog.serverPort)
+	defer conn.Close()
 	client := pb.NewSendLogsClient(conn)
 	// ctx := context.Background()
 	currentTime := time.Now().Local().String()
